@@ -23,3 +23,4 @@ yarn-error.log*
 
 # local reference docs
 .notes
+/public/esbuild.wasm
