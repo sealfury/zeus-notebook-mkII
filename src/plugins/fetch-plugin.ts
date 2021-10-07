@@ -18,8 +18,7 @@ export const fetchPlugin = (inputCode: string) => {
         }
       })
 
-      // Loads **.css files
-      build.onLoad({ filter: /.css$/ }, async (args: any) => {
+      build.onLoad({ filter: /.*/ }, async (args: any) => {
         // Check if file has already been fetched & is in cache
         const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
           args.path
@@ -29,10 +28,13 @@ export const fetchPlugin = (inputCode: string) => {
         if (cachedResult) {
           return cachedResult
         }
+      })
 
+      // Loads **.css files
+      build.onLoad({ filter: /.css$/ }, async (args: any) => {
         const { data, request } = await axios.get(args.path)
 
-        // append escaped CSS string into style element of some
+        // Append escaped CSS string into style element of some
         // html doc via a Javascript snippet
         const escaped = data
           .replace(/\n/g, '')
@@ -57,16 +59,6 @@ export const fetchPlugin = (inputCode: string) => {
       })
 
       build.onLoad({ filter: /.*/ }, async (args: any) => {
-        // Check if file has already been fetched & is in cache
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        )
-
-        // if so return immediately
-        if (cachedResult) {
-          return cachedResult
-        }
-
         const { data, request } = await axios.get(args.path)
 
         const result: esbuild.OnLoadResult = {
