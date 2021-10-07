@@ -1,18 +1,20 @@
 import * as esbuild from 'esbuild-wasm'
 import { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
+
 import { unpkgPathPlugin, fetchPlugin } from './plugins'
 
 const App = () => {
   const ref = useRef<any>()
   const [input, setInput] = useState('')
   const [code, setCode] = useState('')
+  const WASM_URL = 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm'
 
   // Initialize esbuild w/ ref storing service object
   const startService = async () => {
     ref.current = await esbuild.startService({
       worker: true,
-      wasmURL: '/esbuild.wasm',
+      wasmURL: WASM_URL,
     })
   }
 
