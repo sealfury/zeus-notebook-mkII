@@ -20,21 +20,33 @@ export const fetchPlugin = (inputCode: string) => {
           }
         }
 
-        // Check if file has already been fetched & is in cache
-        const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
-          args.path
-        )
+        // // Check if file has already been fetched & is in cache
+        // const cachedResult = await fileCache.getItem<esbuild.OnLoadResult>(
+        //   args.path
+        // )
 
-        // if so return immediately
-        if (cachedResult) {
-          return cachedResult
-        }
+        // // if so return immediately
+        // if (cachedResult) {
+        //   return cachedResult
+        // }
 
         const { data, request } = await axios.get(args.path)
 
+        const fileType = args.path.match(/.css$/) ? 'css' : 'jsx'
+
+        // append CSS into style element of some html doc w/ JS
+        const fileContents =
+          fileType === 'css'
+            ? `
+            const style = document.createElement('style');
+            style.innerText = 'body { background-color: "blue" }';
+            document.head.appendChild(style)
+          `
+            : data
+
         const result: esbuild.OnLoadResult = {
           loader: 'jsx',
-          contents: data,
+          contents: fileContents,
           resolveDir: new URL('./', request.responseURL).pathname,
         }
         // Store response in cache
