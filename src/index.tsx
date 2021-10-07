@@ -1,18 +1,20 @@
 import * as esbuild from 'esbuild-wasm'
 import { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { unpkgPathPlugin } from './plugins/unpkg-path-plugin'
+
+import { unpkgPathPlugin, fetchPlugin } from './plugins'
 
 const App = () => {
   const ref = useRef<any>()
   const [input, setInput] = useState('')
   const [code, setCode] = useState('')
+  const WASM_URL = 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm'
 
   // Initialize esbuild w/ ref storing service object
   const startService = async () => {
     ref.current = await esbuild.startService({
       worker: true,
-      wasmURL: '/esbuild.wasm',
+      wasmURL: WASM_URL,
     })
   }
 
@@ -29,14 +31,12 @@ const App = () => {
       entryPoints: ['index.js'],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [unpkgPathPlugin(), fetchPlugin(input)],
       define: {
         'process.env.NODE_ENV': '"production"', // replace with string "production"
         global: 'window',
       },
     })
-
-    // console.log(result)
 
     setCode(result.outputFiles[0].text)
   }
