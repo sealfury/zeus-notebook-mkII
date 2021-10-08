@@ -1,8 +1,11 @@
 import './code-editor.css'
+import './syntax.css'
 import { useRef } from 'react'
 import Monaco, { EditorDidMount } from '@monaco-editor/react'
 import Prettier from 'prettier'
 import parser from 'prettier/parser-babel'
+import codeShift from 'jscodeshift'
+import Highlighter from 'monaco-jsx-highlighter'
 
 interface CodeEditorProps {
   initialValue: string
@@ -22,6 +25,19 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
     editor
       .getModel()
       ?.updateOptions({ tabSize: 2, indentSize: 2, trimAutoWhitespace: true })
+
+    const highlighter = new Highlighter(
+      // @ts-ignore
+      window.monaco,
+      codeShift,
+      editor
+    )
+    highlighter.highLightOnDidChangeModelContent(
+      () => {},
+      () => {},
+      undefined,
+      () => {}
+    )
   }
 
   const onFormatClick = () => {
@@ -67,7 +83,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
           lineNumbersMinChars: 3,
           fontSize: 14,
           fontLigatures: false,
-          fontWeight: '440',
+          fontWeight: '500',
           fontFamily: 'Monaco',
           scrollBeyondLastLine: false,
           automaticLayout: true,
