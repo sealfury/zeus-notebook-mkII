@@ -1,8 +1,10 @@
+import 'bulmaswatch/solar/bulmaswatch.min.css'
 import * as esbuild from 'esbuild-wasm'
 import { useState, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 
 import { unpkgPathPlugin, fetchPlugin } from './plugins'
+import { CodeEditor } from './components'
 
 const App = () => {
   const ref = useRef<any>()
@@ -41,7 +43,6 @@ const App = () => {
       },
     })
 
-    // setCode(result.outputFiles[0].text)
     iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*')
   }
 
@@ -69,10 +70,10 @@ const App = () => {
 
   return (
     <div>
-      <textarea
-        value={input}
-        onChange={e => setInput(e.target.value)}
-      ></textarea>
+      <CodeEditor
+        initialValue='/* Start Writing Some Code! */'
+        onChange={value => setInput(value)}
+      />
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
