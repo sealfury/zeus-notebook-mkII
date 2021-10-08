@@ -8,7 +8,6 @@ const App = () => {
   const ref = useRef<any>()
   const iframe = useRef<any>()
   const [input, setInput] = useState('')
-  const [code, setCode] = useState('')
   const WASM_URL = 'https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm'
 
   // Initialize esbuild w/ ref storing service object
@@ -77,8 +76,12 @@ const App = () => {
       <div>
         <button onClick={onClick}>Submit</button>
       </div>
-      <pre>{code}</pre>
-      <iframe ref={iframe} sandbox='allow-scripts' srcDoc={html} />
+      <iframe
+        title='User Code Preview'
+        ref={iframe}
+        sandbox='allow-scripts'
+        srcDoc={html}
+      />
     </div>
   )
 }
