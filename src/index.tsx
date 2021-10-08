@@ -42,7 +42,6 @@ const App = () => {
       },
     })
 
-    // setCode(result.outputFiles[0].text)
     iframe.current.contentWindow.postMessage(result.outputFiles[0].text, '*')
   }
 
@@ -70,7 +69,10 @@ const App = () => {
 
   return (
     <div>
-      <CodeEditor initialValue='/* Start Writing Some Code! */' />
+      <CodeEditor
+        initialValue='/* Start Writing Some Code! */'
+        onChange={value => setInput(value)}
+      />
       <textarea
         value={input}
         onChange={e => setInput(e.target.value)}
