@@ -50,7 +50,15 @@ const App = () => {
         <div id="root"></div>
         <script>
           window.addEventListener('message', (event) => {
-            eval(event.data)
+            try {
+              eval(event.data)
+            } catch (err) {
+              // intercept error to display in code execution area
+              const root = document.querySelector('#root')
+              root.innerHTML = 
+                '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
+              throw err // re-throw to output in console again
+            }
           }, false);
         </script>
       </body>
