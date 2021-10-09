@@ -1,5 +1,5 @@
-import './code-editor.css'
 import './syntax.css'
+import './code-editor.css'
 import { useRef } from 'react'
 import Monaco, { EditorDidMount } from '@monaco-editor/react'
 import Prettier from 'prettier'
