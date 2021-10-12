@@ -15,11 +15,17 @@ const html = /*template*/ `
         <script>
           const handleError = (err) => {
             // intercept error to display in code preview area
-            const root = document.querySelector('#root')
+            const root = document.querySelector('#root');
             root.innerHTML = 
               '<div style="color: red;"><h4>Runtime Error</h4>' + err + '</div>';
-            console.error(err) // output detailed error in console again
-          }
+            console.error(err); // output detailed error in console again
+          };
+          // Async errors
+          window.addEventListener('error', (event) => {
+            event.preventDefault()
+            handleError(event.error)
+          });
+          // Runtime Errors
           window.addEventListener('message', (event) => {
             try {
               eval(event.data)
