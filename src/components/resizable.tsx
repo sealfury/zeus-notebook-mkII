@@ -12,6 +12,7 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
   const [innerWidth, setInnerWidth] = useState(window.innerWidth)
   const [width, setWidth] = useState(window.innerWidth * 0.75)
 
+  // Debounce horizontal resize functionality
   useEffect(() => {
     let timer: any
     const windowListener = () => {
