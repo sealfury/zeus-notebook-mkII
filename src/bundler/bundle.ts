@@ -13,18 +13,31 @@ const bundle = async (codeInput: string) => {
     })
   }
 
-  const result = await service.build({
-    entryPoints: ['index.js'],
-    bundle: true,
-    write: false,
-    plugins: [unpkgPathPlugin(), fetchPlugin(codeInput)],
-    define: {
-      'process.env.NODE_ENV': '"production"', // replace with string "production"
-      global: 'window',
-    },
-  })
+  try {
+    const result = await service.build({
+      entryPoints: ['index.js'],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin(), fetchPlugin(codeInput)],
+      define: {
+        'process.env.NODE_ENV': '"production"', // replace with string "production"
+        global: 'window',
+      },
+    })
 
-  return result.outputFiles[0].text
+    return {
+      code: result.outputFiles[0].text,
+      err: '',
+    }
+  } catch (err) {
+    // type check instead of assigning error 'any' type
+    if (err instanceof Error) {
+      return {
+        code: '',
+        err: err.message,
+      }
+    }
+  }
 }
 
 export default bundle
