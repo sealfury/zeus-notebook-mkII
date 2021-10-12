@@ -2,7 +2,7 @@ import produce from 'immer'
 
 import { ActionType } from '../action-types'
 import { Action } from '../actions'
-import { Cell } from '../cell'
+import { Cell, randomId } from '../cell'
 
 interface CellState {
   loading: boolean
@@ -41,6 +41,22 @@ const reducer = produce(
 
         return
       case ActionType.INSERT_CELL_BEFORE:
+        const cell: Cell = {
+          id: randomId(),
+          type: action.payload.type,
+          content: '',
+        }
+
+        state.data[cell.id] = cell
+
+        const foundIndex = state.order.findIndex(id => id === action.payload.id)
+
+        if (foundIndex < 0) {
+          state.order.push(cell.id)
+        } else {
+          state.order.splice(foundIndex, 0, cell.id)
+        }
+
         return state
       case ActionType.UPDATE_CELL:
         const { id, content } = action.payload
