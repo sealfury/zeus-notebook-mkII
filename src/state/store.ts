@@ -8,7 +8,7 @@ export const store = createStore(reducers, {}, applyMiddleware(thunk))
 
 // Temporarily hard-coding cell creation to test list/list-item components
 store.dispatch({
-  type: ActionType.INSERT_CELL_BEFORE,
+  type: ActionType.INSERT_CELL_AFTER,
   payload: {
     id: null,
     type: 'code',
@@ -16,7 +16,7 @@ store.dispatch({
 })
 
 store.dispatch({
-  type: ActionType.INSERT_CELL_BEFORE,
+  type: ActionType.INSERT_CELL_AFTER,
   payload: {
     id: null,
     type: 'text',
@@ -24,7 +24,7 @@ store.dispatch({
 })
 
 store.dispatch({
-  type: ActionType.INSERT_CELL_BEFORE,
+  type: ActionType.INSERT_CELL_AFTER,
   payload: {
     id: null,
     type: 'code',
@@ -32,7 +32,7 @@ store.dispatch({
 })
 
 store.dispatch({
-  type: ActionType.INSERT_CELL_BEFORE,
+  type: ActionType.INSERT_CELL_AFTER,
   payload: {
     id: null,
     type: 'text',
