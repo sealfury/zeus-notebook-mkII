@@ -1,2 +1,2 @@
-export { default as useTypedSelector } from './use-typed-selector'
-export { default as useActions } from './use-actions'
+export * from './use-typed-selector'
+export * from './use-actions'
