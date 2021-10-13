@@ -3,7 +3,9 @@ import { useTypedSelector } from '../hooks'
 
 const CellList: React.FC = () => {
   const cells = useTypedSelector(({ cells: { order, data } }) => {
-    return order.map(id => data[id])
+    return order.map(id => {
+      return data[id]
+    })
   })
 
   const renderedCells = cells.map(cell => (
