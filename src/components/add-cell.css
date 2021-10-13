@@ -8,6 +8,14 @@
   opacity: 1;
 }
 
+/* 
+** Force visibility of component when there are
+** no code or text cells displayed
+*/
+.add-cell.force-visible {
+  opacity: 1;
+}
+
 .add-cell .divider {
   position: absolute;
   top: 50%;
