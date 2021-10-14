@@ -18,16 +18,29 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     const { data, order } = state.cells
     const orderedCells = order.map(id => data[id])
     /*
-     ** create array of code cells excluding current cell
-     ** with functionality to render user code in preview window
+     * create array of code cells excluding current cell
+     * with functionality to render user code in preview window
      */
     const cumulativeCode = [
+      /*
+       * checks to show complex objects -> jsx elements -> React Components
+       * prevents import name collisions b/w show() & user imports
+       */
       `
-        const show = () => {
+        import React from 'react';
+        import ReactDOM from 'react-dom';
+
+        const show = (value) => {
+          const root = document.querySelector('#root');
+
           if (typeof  value === 'object') {
-            document.querySelector('#root).innerHTML = JSON.stringify(value)
+            if (value.$$typeof && value.props) {
+              ReactDOM.render(value, root);
+            } else {
+              root.innerHTML = JSON.stringify(value);
+            }
           } else {
-            document.querySelector('#root).innerHTML = value
+            root.innerHTML = value;
           }
         }
       `,
