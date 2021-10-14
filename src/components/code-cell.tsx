@@ -18,15 +18,19 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     const { data, order } = state.cells
     const orderedCells = order.map(id => data[id])
     /*
-    ** create array of code cells excluding current cell 
-    ** with functionality to render user code in preview window
-    */
+     ** create array of code cells excluding current cell
+     ** with functionality to render user code in preview window
+     */
     const cumulativeCode = [
       `
         const show = () => {
-          document.querySelector('#root).innerHTML = value
+          if (typeof  value === 'object') {
+            document.querySelector('#root).innerHTML = JSON.stringify(value)
+          } else {
+            document.querySelector('#root).innerHTML = value
+          }
         }
-      `
+      `,
     ]
     for (let c of orderedCells) {
       if (c.type === 'code') {
