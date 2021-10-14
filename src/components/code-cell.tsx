@@ -12,8 +12,15 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions()
   const bundleRes = useTypedSelector(state => state.bundles[cell.id])
 
-  // Debounce bundling logic
   useEffect(() => {
+    // eager bundling on page render
+    if (!bundleRes) {
+      createBundle(cell.id, cell.content)
+      return
+    }
+
+    // Debounce bundling logic
+    // bundle user code after 750ms between keystrokes
     const timer = setTimeout(async () => {
       createBundle(cell.id, cell.content)
     }, 750)
@@ -21,7 +28,10 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
     return () => {
       clearTimeout(timer)
     }
-  }, [cell.id, cell.content])
+    // remove dependency warning for bundleRes
+    // (adding it creates infinite loop)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cell.id, cell.content, createBundle])
 
   return (
     <Resizable direction='vertical'>
