@@ -17,36 +17,44 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const cumulative = useTypedSelector(state => {
     const { data, order } = state.cells
     const orderedCells = order.map(id => data[id])
+
+    /*
+     * checks to show complex objects -> jsx elements -> React Components
+     * prevents import name collisions b/w show() & user imports
+     * 'var' to allow for multiple calls to fn or no-op
+     */
+    const showFn = `
+      import _React from 'react'
+      import _ReactDOM from 'react-dom'
+
+      var show = (value) => {
+        const root = document.querySelector('#root')
+
+        if (typeof  value === 'object') {
+          if (value.$$typeof && value.props) {
+            _ReactDOM.render(value, root)
+          } else {
+            root.innerHTML = JSON.stringify(value)
+          }
+        } else {
+          root.innerHTML = value
+        }
+      }
+    `
+    const showFnNoOp = 'var show = () => {}'
     /*
      * create array of code cells excluding current cell
      * with functionality to render user code in preview window
      */
-    const cumulativeCode = [
-      /*
-       * checks to show complex objects -> jsx elements -> React Components
-       * prevents import name collisions b/w show() & user imports
-       */
-      `
-        import _React from 'react'
-        import _ReactDOM from 'react-dom'
-
-        const show = (value) => {
-          const root = document.querySelector('#root')
-
-          if (typeof  value === 'object') {
-            if (value.$$typeof && value.props) {
-              _ReactDOM.render(value, root)
-            } else {
-              root.innerHTML = JSON.stringify(value)
-            }
-          } else {
-            root.innerHTML = value
-          }
-        }
-      `,
-    ]
+    const cumulativeCode = []
     for (let c of orderedCells) {
       if (c.type === 'code') {
+        // only execute show() in cell it was invoked
+        if (c.id === cell.id) {
+          cumulative.push(showFn)
+        } else {
+          cumulative.push(showFnNoOp)
+        }
         cumulativeCode.push(c.content)
       }
       if (c.id === cell.id) {
