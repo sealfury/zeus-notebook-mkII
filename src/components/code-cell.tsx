@@ -12,6 +12,24 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions()
   const bundleRes = useTypedSelector(state => state.bundles[cell.id])
+  
+  // get code from current cell and all previous cells
+  const cumulative = useTypedSelector(state => {
+    const { data, order } = state.cells
+    const orderedCells = order.map(id => data[id])
+
+    // create array of code cells excluding current cell
+    const cumulativeCode = []
+    for (let c of orderedCells) {
+      if (c.type === 'code') {
+        cumulativeCode.push(c.content)
+      }
+      if (c.id === cell.id) {
+        break
+      }
+    }
+    return cumulativeCode
+  })
 
   useEffect(() => {
     // eager bundling on page render
