@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import { CodeEditor, Preview, Resizable } from './'
-import { bundle } from '../bundler'
 import { Cell } from '../state'
-import { useActions } from '../hooks'
+import { useActions, useTypedSelector } from '../hooks'
 
 interface CodeCellProps {
   cell: Cell
 }
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
-  const [code, setCode] = useState('')
-  const [err, setErr] = useState('')
-  const { updateCell } = useActions()
+  const { updateCell, createBundle } = useActions()
+  const bundleRes = useTypedSelector(state => state.bundles[cell.id])
 
   // Debounce bundling logic
   useEffect(() => {
     const timer = setTimeout(async () => {
-      const output = await bundle(cell.content)
-      setCode(output!.code)
-      setErr(output!.err)
+      createBundle(cell.id, cell.content)
     }, 750)
 
     return () => {
       clearTimeout(timer)
     }
-  }, [cell.content])
+  }, [cell.id, cell.content])
 
   return (
     <Resizable direction='vertical'>
@@ -42,7 +38,9 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
             onChange={value => updateCell(cell.id, value)}
           />
         </Resizable>
-        <Preview code={code} bundlingStatus={err} />
+        {bundleRes && (
+          <Preview code={bundleRes.code} bundlingStatus={bundleRes.err} />
+        )}
       </div>
     </Resizable>
   )
