@@ -12,7 +12,7 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions()
   const bundleRes = useTypedSelector(state => state.bundles[cell.id])
-  
+
   // get code from current cell and all previous cells
   const cumulative = useTypedSelector(state => {
     const { data, order } = state.cells
@@ -34,23 +34,22 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   useEffect(() => {
     // eager bundling on page render
     if (!bundleRes) {
-      createBundle(cell.id, cell.content)
+      createBundle(cell.id, cumulative.join('\n'))
       return
     }
 
     // Debounce bundling logic
     // bundle user code after 750ms between keystrokes
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content)
+      createBundle(cell.id, cumulative.join('\n'))
     }, 750)
 
     return () => {
       clearTimeout(timer)
     }
-    // remove dependency warning for bundleRes
-    // (adding it creates infinite loop)
+    // adding bundleRes as dependency creates infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id, cell.content, createBundle])
+  }, [cell.id, cumulative.join('\n'), createBundle])
 
   return (
     <Resizable direction='vertical'>
