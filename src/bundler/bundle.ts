@@ -23,6 +23,9 @@ const bundle = async (codeInput: string) => {
         'process.env.NODE_ENV': '"production"', // replace with string "production"
         global: 'window',
       },
+      // prevent user import conflicts with show() fn in code cell
+      jsxFactory: '_React.createElement',
+      jsxFragment: '_React.Fragment',
     })
 
     return {
