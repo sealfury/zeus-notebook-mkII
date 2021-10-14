@@ -29,13 +29,12 @@ const bundle = async (codeInput: string) => {
       code: result.outputFiles[0].text,
       err: '',
     }
-  } catch (err) {
-    // type check instead of assigning error 'any' type
-    if (err instanceof Error) {
-      return {
-        code: '',
-        err: err.message,
-      }
+    // assign err any type instead of type guarding it
+    // to prevent conflict in bundle action creator
+  } catch (err: any) {
+    return {
+      code: '',
+      err: err.message,
     }
   }
 }
