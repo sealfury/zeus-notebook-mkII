@@ -17,9 +17,17 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const cumulative = useTypedSelector(state => {
     const { data, order } = state.cells
     const orderedCells = order.map(id => data[id])
-
-    // create array of code cells excluding current cell
-    const cumulativeCode = []
+    /*
+    ** create array of code cells excluding current cell 
+    ** with functionality to render user code in preview window
+    */
+    const cumulativeCode = [
+      `
+        const show = () => {
+          document.querySelector('#root).innerHTML = value
+        }
+      `
+    ]
     for (let c of orderedCells) {
       if (c.type === 'code') {
         cumulativeCode.push(c.content)
