@@ -1,4 +1,5 @@
 ## Monorepo Ignore settings
+.DS_Store
 
 # local reference docs
 .notes
