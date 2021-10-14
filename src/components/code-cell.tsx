@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 
 import { CodeEditor, Preview, Resizable } from './'
 import { Cell } from '../state'
-import { useActions, useTypedSelector } from '../hooks'
+import { useActions, useTypedSelector, useCumulativeCode } from '../hooks'
 
 interface CodeCellProps {
   cell: Cell
@@ -12,27 +12,27 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const { updateCell, createBundle } = useActions()
   const bundleRes = useTypedSelector(state => state.bundles[cell.id])
+  const cumulativeCode = useCumulativeCode(cell.id)
 
   useEffect(() => {
     // eager bundling on page render
     if (!bundleRes) {
-      createBundle(cell.id, cell.content)
+      createBundle(cell.id, cumulativeCode)
       return
     }
 
     // Debounce bundling logic
     // bundle user code after 750ms between keystrokes
     const timer = setTimeout(async () => {
-      createBundle(cell.id, cell.content)
+      createBundle(cell.id, cumulativeCode)
     }, 750)
 
     return () => {
       clearTimeout(timer)
     }
-    // remove dependency warning for bundleRes
-    // (adding it creates infinite loop)
+    // adding bundleRes as dependency creates infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cell.id, cell.content, createBundle])
+  }, [cell.id, cumulativeCode, createBundle])
 
   return (
     <Resizable direction='vertical'>
