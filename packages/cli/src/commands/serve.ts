@@ -17,7 +17,7 @@ export const serveCommand = new Command()
 
       await serve(parseInt(options.port), fileName, dir)
       console.log(
-        `Opened ${filename}! Navigate to http://localhost:${options.port} to edit.`
+        `Opened '${filename}'! Navigate to http://localhost:${options.port} to edit.`
       )
     } catch (err: any) {
       if (err.code === 'EADDRINUSE') {
