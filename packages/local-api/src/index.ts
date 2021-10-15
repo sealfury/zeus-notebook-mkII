@@ -12,6 +12,8 @@ export const serve = (
 ) => {
   const app = express()
 
+  app.use(createCellsRouter(filename, dir))
+
   if (useProxy) {
     // local development of react app
     app.use(
@@ -26,8 +28,6 @@ export const serve = (
     const pkgAbsPath = require.resolve('local-client/build/index.html')
     app.use(express.static(path.dirname(pkgAbsPath)))
   }
-
-  app.use(createCellsRouter(filename, dir))
 
   return new Promise<void>((resolve, reject) => {
     app.listen(port, resolve).on('error', reject)
