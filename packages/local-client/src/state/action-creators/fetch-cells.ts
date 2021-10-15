@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { ActionType } from '../action-types'
 import { Action } from '../actions'
-import { Cell, CellTypes } from '../'
+import { Cell } from '../'
 
 export const fetchCells = () => {
   return async (dispatch: Dispatch<Action>) => {
