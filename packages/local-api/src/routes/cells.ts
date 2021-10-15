@@ -10,7 +10,7 @@ interface Cell {
 
 export const createCellsRouter = (filename: string, dir: string) => {
   const router = express.Router()
-  router.use(express.json)
+  // router.use(express.json)
 
   const fullPath = path.join(dir, filename)
 
@@ -39,7 +39,7 @@ export const createCellsRouter = (filename: string, dir: string) => {
     // Write cells into file
     await fs.writeFile(fullPath, JSON.stringify(cells), 'utf-8')
 
-    res.send({ status: 201 })
+    res.send({ status: 'ok' })
   })
 
   return router

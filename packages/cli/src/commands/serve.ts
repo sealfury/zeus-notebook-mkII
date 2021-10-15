@@ -15,10 +15,12 @@ export const serveCommand = new Command()
       // calculate directory variable & user-provided path
       const dir = path.join(process.cwd(), path.dirname(filename))
 
-      // find actual file name in whatever relative path user provides
-      const fileName = path.basename(filename)
-
-      await serve(parseInt(options.port), fileName, dir, !isProduction)
+      await serve(
+        parseInt(options.port),
+        path.basename(filename),
+        dir,
+        !isProduction
+      )
       console.log(
         `Opened '${filename}'! Navigate to http://localhost:${options.port} to edit.`
       )
