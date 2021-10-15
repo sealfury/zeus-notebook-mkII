@@ -2,6 +2,9 @@ import path from 'path'
 import { Command } from 'commander'
 import { serve } from 'local-api'
 
+// determine how to set useProxy arg
+const isProduction = process.env.NODE_ENV === 'production'
+
 // [] = optional value, <> = required value
 export const serveCommand = new Command()
   .command('serve [filename]')
@@ -15,7 +18,7 @@ export const serveCommand = new Command()
       // find actual file name in whatever relative path user provides
       const fileName = path.basename(filename)
 
-      await serve(parseInt(options.port), fileName, dir)
+      await serve(parseInt(options.port), fileName, dir, !isProduction)
       console.log(
         `Opened '${filename}'! Navigate to http://localhost:${options.port} to edit.`
       )
