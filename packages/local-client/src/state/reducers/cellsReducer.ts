@@ -23,6 +23,11 @@ const initialState: CellState = {
 const reducer = produce(
   (state: CellState = initialState, action: Action): CellState | void => {
     switch (action.type) {
+      // error posting to '/cells'
+      case ActionType.SAVE_CELLS_ERROR:
+        state.error = action.payload
+
+        return state
       // set loading to true
       case ActionType.FETCH_CELLS:
         state.loading = true
