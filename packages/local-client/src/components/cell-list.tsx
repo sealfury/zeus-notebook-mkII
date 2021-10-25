@@ -5,20 +5,22 @@ import { CellListItem, AddCell } from './'
 import { useTypedSelector, useActions } from '../hooks'
 
 const CellList: React.FC = () => {
-  // refactoring this to implicit returns seemed to break something
-  // but it's always worth another try after 1st stable deploy
-  const cells = useTypedSelector(({ cells: { order, data } }) => {
-    return order.map(id => {
-      return data[id]
-    })
-  })
+  // const cells = useTypedSelector(({ cells: { order, data } }) => {
+  //   return order.map(id => {
+  //     return data[id]
+  //   })
+  // })
+  const cells = useTypedSelector(({ cells: { order, data } }) =>
+    order.map(id => data[id])
+  )
 
-  const { fetchCells } = useActions()
+  const { fetchCells, saveCells } = useActions()
 
   useEffect(() => {
     fetchCells()
-    // eslint-disable-next-line
-  }, [])
+  }, [fetchCells])
+
+  
 
   const renderedCells = cells.map(cell => (
     <Fragment key={cell.id}>
