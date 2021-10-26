@@ -1,5 +1,5 @@
 {
-  "name": "local-api",
+  "name": "@zeusnotebook/localapi",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
