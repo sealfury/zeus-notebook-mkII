@@ -25,7 +25,7 @@ export const serve = (
     )
   } else {
     // running on user's machine
-    const pkgAbsPath = require.resolve('local-client/build/index.html')
+    const pkgAbsPath = require.resolve('@zeusnotebook/client/build/index.html')
     app.use(express.static(path.dirname(pkgAbsPath)))
   }
 
